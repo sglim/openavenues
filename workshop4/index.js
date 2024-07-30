@@ -44,8 +44,8 @@ const Attendance = z
 console.log(
   JSON.stringify(
     Attendance.parse([
-      { attended: "false", date: "2024-07-10" },
-      { attended: "true", date: "2024-07-17" },
+      { attended: false, date: "2024-07-10" },
+      { attended: true, date: "2024-07-17" },
     ]),
     null,
     2
