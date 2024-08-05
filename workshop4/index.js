@@ -1,7 +1,12 @@
 const { z } = require("zod");
 
 const Password = z.string().min(4, "please enter longer than 4");
-console.log(Password.safeParse("123").error?.message);
+const parsedPassword = Password.safeParse("123");
+if (parsedPassword.success) {
+  console.log(parsedPassword.data);
+} else {
+  console.error(parsedPassword.error);
+}
 
 const Email = z.string().email("Please enter a valid email");
 console.log(Email.safeParse("123").error?.message);

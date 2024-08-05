@@ -6,8 +6,18 @@
 
 const axios = require("axios");
 const cheerio = require("cheerio");
+const { z } = require("zod");
 
 const url = "https://www.libertyharbor.com/availability/";
+
+const Listing = z.object({
+  building: z.string(),
+  residence: z.coerce.number(),
+  beds: z.coerce.number().min(0).max(100),
+  baths: z.coerce.number().min(0).max(100),
+  sqft: z.coerce.number().min(10),
+  price: z.coerce.number(),
+});
 
 axios.get(url).then((response) => {
   const result = [];
@@ -25,7 +35,7 @@ axios.get(url).then((response) => {
         10
       ),
     };
-    result.push(listing);
+    result.push(Listing.parse(listing));
   });
   console.log(JSON.stringify(result, null, 2));
 });
