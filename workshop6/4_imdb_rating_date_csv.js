@@ -48,6 +48,15 @@ const SearchResponse = z
     }),
   }));
 
+const Ranking = z.object({
+  rank: z.coerce.number(),
+  name: z.string(),
+  weeks_in_top_10: z.coerce.number(),
+  hours_viewed: z.coerce.number(),
+  runtime: z.string(),
+  views: z.coerce.number(),
+});
+
 async function main() {
   const response = await axios.get("https://www.netflix.com/tudum/top10/");
   const result = [];
@@ -59,9 +68,9 @@ async function main() {
       rank: $(columns[0]).text().trim(),
       name: $(columns[1]).text().trim(),
       weeks_in_top_10: $(columns[2]).text().trim(),
-      hours_viewed: $(columns[3]).text().trim(),
+      hours_viewed: $(columns[3]).text().replace(/,/g, "").trim(),
       runtime: $(columns[4]).text().trim(),
-      views: $(columns[5]).text().trim(),
+      views: $(columns[5]).text().trim().replace(/,/g, ""),
     };
     const suggestionResponse = await axios.get(
       `https://v3.sg.media-imdb.com/suggestion/x/${ranking.name}.json?includeVideos=1`
@@ -77,7 +86,7 @@ async function main() {
     ).text();
     console.log(score);
     ranking.imdb_score = score;
-    result.push(ranking);
+    result.push(Ranking.parse(ranking));
   }
 
   const output = stringify(result, { header: true, quoted: true });
