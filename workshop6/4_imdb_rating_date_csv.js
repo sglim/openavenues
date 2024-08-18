@@ -55,6 +55,7 @@ const Ranking = z.object({
   hours_viewed: z.coerce.number(),
   runtime: z.string(),
   views: z.coerce.number(),
+  imdb_score: z.coerce.number(),
 });
 
 async function main() {

@@ -65,6 +65,7 @@ async function main() {
     const suggestion = SearchResponse.parse(suggestionResponse.data);
     const found = suggestion.data.find((row) => row.title === ranking.name);
     console.log(found);
+    ranking.found = found;
     result.push(ranking);
   }
   console.log(JSON.stringify(result, null, 2));
